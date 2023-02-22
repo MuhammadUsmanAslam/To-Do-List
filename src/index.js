@@ -23,8 +23,9 @@ const displayTodoList = (todos) => {
   todos.forEach((todo) => {
     const todoItem = document.createElement('li');
     todoItem.className = 'todo-item';
-    todoItem.innerHTML = `<input type="checkbox" class="checkbox" ${todo.completed ? 'checked' : ''}>
-    <p>${todo.description}</p>`;
+    todoItem.innerHTML = `<div class="todo-item-left"><input type="checkbox" class="checkbox" ${todo.completed ? 'checked' : ''}>
+    <p>${todo.description}</p></div>
+    <span class="material-symbols-outlined">more_vert</span>`;
     todosList.appendChild(todoItem);
   });
   const clearList = document.createElement('li');

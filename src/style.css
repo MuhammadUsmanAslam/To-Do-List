@@ -28,9 +28,20 @@ body {
   display: flex;
   padding: 1em;
   border-bottom: 2px solid lightgray;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.todo-item > .checkbox {
+.todo-item-left {
+  display: flex;
+}
+
+.todo-item > span {
+  cursor: pointer;
+  color: lightgray;
+}
+
+.todo-item-left > .checkbox {
   margin: 0 1em 0 0;
 }
 
