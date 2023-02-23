@@ -1,12 +1,15 @@
 import './style.css';
 import {
   addTodo,
-  saveToLocalStorage,
-  getFromLocalStorage,
   deleteTodoItem,
   deleteAllCompleted,
   updateTodo,
-} from './todo.js';
+} from './modules/todo.js';
+
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+} from './modules/local-storage.js';
 
 const displayTodoList = () => {
   const todos = getFromLocalStorage();
@@ -53,10 +56,12 @@ const displayTodoList = () => {
     editInput.className = 'display-none';
     editInput.type = 'text';
     editInput.value = todo.description;
-    editInput.addEventListener('focusout', (e) => {
-      todoItem.classList.toggle('bg-focus');
-      updateTodo(todos, index, e.target.value);
-      displayTodoList();
+    editInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        todoItem.classList.toggle('bg-focus');
+        updateTodo(todos, index, e.target.value);
+        displayTodoList();
+      }
     });
     todoItemLeft.appendChild(editInput);
 
