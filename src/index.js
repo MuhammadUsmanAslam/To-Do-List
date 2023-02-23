@@ -1,39 +1,113 @@
 import './style.css';
+import {
+  addTodo,
+  saveToLocalStorage,
+  getFromLocalStorage,
+  deleteTodoItem,
+  deleteAllCompleted,
+  updateTodo,
+} from './todo.js';
 
-const todos = [
-  {
-    description: 'Go for grocery Shopping',
-    completed: false,
-    index: 0,
-  },
-  {
-    description: 'Go for walk',
-    completed: true,
-    index: 1,
-  },
-  {
-    description: 'Go to the city',
-    completed: false,
-    index: 2,
-  },
-];
-
-const displayTodoList = (todos) => {
+const displayTodoList = () => {
+  const todos = getFromLocalStorage();
   const todosList = document.getElementById('todos-list');
-  todos.forEach((todo) => {
+  todosList.innerHTML = '';
+  todos.forEach((todo, index) => {
     const todoItem = document.createElement('li');
     todoItem.className = 'todo-item';
-    todoItem.innerHTML = `<div class="todo-item-left"><input type="checkbox" class="checkbox" ${todo.completed ? 'checked' : ''}>
-    <p>${todo.description}</p></div>
-    <span class="material-symbols-outlined">more_vert</span>`;
+
+    const todoItemLeft = document.createElement('div');
+    todoItemLeft.className = 'todo-item-left';
+
+    const input = document.createElement('input');
+    input.className = 'checkbox';
+    input.type = 'checkbox';
+    if (todo.completed) {
+      input.setAttribute('checked', '');
+    }
+
+    input.onchange = (e) => {
+      if (e.target.checked) {
+        todos[index].completed = true;
+        e.target.parentNode.children[1].classList.add('line-through');
+      } else {
+        todos[index].completed = false;
+        e.target.parentNode.children[1].classList.remove('line-through');
+      }
+      saveToLocalStorage(todos);
+    };
+
+    todoItemLeft.appendChild(input);
+
+    const listItemPara = document.createElement('p');
+    listItemPara.classList.add('display-flex');
+    if (todo.completed) {
+      listItemPara.classList.add('line-through');
+    } else {
+      listItemPara.classList.remove('line-through');
+    }
+    listItemPara.innerText = todo.description;
+    todoItemLeft.appendChild(listItemPara);
+
+    const editInput = document.createElement('input');
+    editInput.className = 'display-none';
+    editInput.type = 'text';
+    editInput.value = todo.description;
+    editInput.addEventListener('focusout', (e) => {
+      todoItem.classList.toggle('bg-focus');
+      updateTodo(todos, index, e.target.value);
+      displayTodoList();
+    });
+    todoItemLeft.appendChild(editInput);
+
+    todoItem.appendChild(todoItemLeft);
+
+    const deleteIcon = document.createElement('span');
+    deleteIcon.className = 'display-none';
+    deleteIcon.innerHTML = 'delete';
+    deleteIcon.addEventListener('click', () => {
+      deleteTodoItem(todos, index);
+      displayTodoList();
+    });
+    todoItem.appendChild(deleteIcon);
+
+    const moreVert = document.createElement('span');
+    moreVert.className = 'material-symbols-outlined';
+    moreVert.innerHTML = 'more_vert';
+    moreVert.addEventListener('click', () => {
+      moreVert.className = 'display-none';
+      deleteIcon.className = 'material-symbols-outlined';
+
+      listItemPara.className = 'display-none';
+      editInput.className = 'display-flex';
+      todoItem.classList.toggle('bg-focus');
+      editInput.focus();
+    });
+    todoItem.appendChild(moreVert);
     todosList.appendChild(todoItem);
+
+    const clearList = document.getElementById('clear-list');
+    clearList.addEventListener('click', () => {
+      deleteAllCompleted(todos);
+      displayTodoList();
+    });
   });
-  const clearList = document.createElement('li');
-  clearList.classList.add('clear-list');
-  clearList.innerText = 'Clear All Completed';
-  todosList.appendChild(clearList);
 };
 
 window.addEventListener('load', () => {
-  displayTodoList(todos);
+  const addNewTodo = document.getElementById('add-new-todo');
+  addNewTodo.addEventListener('click', () => {
+    addTodo();
+    displayTodoList();
+  });
+
+  const todoInput = document.getElementById('todo-input');
+  todoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      addTodo();
+      displayTodoList();
+    }
+  });
+
+  displayTodoList();
 });

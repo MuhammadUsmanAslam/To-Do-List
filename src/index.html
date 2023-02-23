@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <script src="https://kit.fontawesome.com/4e655bdddb.js" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Todo List</title>
 </head>
@@ -11,10 +10,10 @@
 
     <div class="todos-container">
 
-        <ul id="todos-list" class="todos-list">
-            <li class="todo-item">Today's Todo List <span class="material-symbols-outlined">sync</span></li>
-            <li class="todo-item"><input type="text" placeholder="Add to your list ..." class="todo-input"/><span class="material-symbols-outlined">keyboard_return</span></li>
-        </ul>
+        <h1 class="todo-item">Today's Todo List <span class="material-symbols-outlined">sync</span></h1>
+        <div class="todo-item"><input id="todo-input"  type="text" placeholder="Add to your list ..." class="todo-item todo-input"/><span id="add-new-todo" class="material-symbols-outlined">keyboard_return</span></div>
+        <ul id="todos-list" class="todos-list"></ul>
+        <button id="clear-list" class="clear-list">Clear All Completed</button>
     </div>
 </body>
 </html>
