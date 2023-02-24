@@ -5,43 +5,117 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _modules_todo_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var _modules_local_storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
 
 
-const todos = [
-  {
-    description: 'Go for grocery Shopping',
-    completed: false,
-    index: 0,
-  },
-  {
-    description: 'Go for walk',
-    completed: true,
-    index: 1,
-  },
-  {
-    description: 'Go to the city',
-    completed: false,
-    index: 2,
-  },
-];
 
-const displayTodoList = (todos) => {
+
+
+const displayTodoList = () => {
+  const todos = (0,_modules_local_storage_js__WEBPACK_IMPORTED_MODULE_2__.getFromLocalStorage)();
   const todosList = document.getElementById('todos-list');
-  todos.forEach((todo) => {
+  todosList.innerHTML = '';
+  todos.forEach((todo, index) => {
     const todoItem = document.createElement('li');
     todoItem.className = 'todo-item';
-    todoItem.innerHTML = `<input type="checkbox" class="checkbox" ${todo.completed ? 'checked' : ''}>
-    <p>${todo.description}</p>`;
+
+    const todoItemLeft = document.createElement('div');
+    todoItemLeft.className = 'todo-item-left';
+
+    const input = document.createElement('input');
+    input.className = 'checkbox';
+    input.type = 'checkbox';
+    if (todo.completed) {
+      input.setAttribute('checked', '');
+    }
+
+    input.onchange = (e) => {
+      if (e.target.checked) {
+        todos[index].completed = true;
+        e.target.parentNode.children[1].classList.add('line-through');
+      } else {
+        todos[index].completed = false;
+        e.target.parentNode.children[1].classList.remove('line-through');
+      }
+      (0,_modules_local_storage_js__WEBPACK_IMPORTED_MODULE_2__.saveToLocalStorage)(todos);
+    };
+
+    todoItemLeft.appendChild(input);
+
+    const listItemPara = document.createElement('p');
+    listItemPara.classList.add('display-flex');
+    if (todo.completed) {
+      listItemPara.classList.add('line-through');
+    } else {
+      listItemPara.classList.remove('line-through');
+    }
+    listItemPara.innerText = todo.description;
+    todoItemLeft.appendChild(listItemPara);
+
+    const editInput = document.createElement('input');
+    editInput.className = 'display-none';
+    editInput.type = 'text';
+    editInput.value = todo.description;
+    editInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        todoItem.classList.toggle('bg-focus');
+        (0,_modules_todo_js__WEBPACK_IMPORTED_MODULE_1__.updateTodo)(todos, index, e.target.value);
+        displayTodoList();
+      }
+    });
+    todoItemLeft.appendChild(editInput);
+
+    todoItem.appendChild(todoItemLeft);
+
+    const deleteIcon = document.createElement('span');
+    deleteIcon.className = 'display-none';
+    deleteIcon.innerHTML = 'delete';
+    deleteIcon.addEventListener('click', () => {
+      (0,_modules_todo_js__WEBPACK_IMPORTED_MODULE_1__.deleteTodoItem)(todos, index);
+      displayTodoList();
+    });
+    todoItem.appendChild(deleteIcon);
+
+    const moreVert = document.createElement('span');
+    moreVert.className = 'material-symbols-outlined';
+    moreVert.innerHTML = 'more_vert';
+    moreVert.addEventListener('click', () => {
+      moreVert.className = 'display-none';
+      deleteIcon.className = 'material-symbols-outlined';
+
+      listItemPara.className = 'display-none';
+      editInput.className = 'display-flex';
+      todoItem.classList.toggle('bg-focus');
+      editInput.focus();
+    });
+    todoItem.appendChild(moreVert);
     todosList.appendChild(todoItem);
+
+    const clearList = document.getElementById('clear-list');
+    clearList.addEventListener('click', () => {
+      (0,_modules_todo_js__WEBPACK_IMPORTED_MODULE_1__.deleteAllCompleted)(todos);
+      displayTodoList();
+    });
   });
-  const clearList = document.createElement('li');
-  clearList.classList.add('clear-list');
-  clearList.innerText = 'Clear All Completed';
-  todosList.appendChild(clearList);
 };
 
 window.addEventListener('load', () => {
-  displayTodoList(todos);
+  const addNewTodo = document.getElementById('add-new-todo');
+  addNewTodo.addEventListener('click', () => {
+    (0,_modules_todo_js__WEBPACK_IMPORTED_MODULE_1__.addTodo)();
+    displayTodoList();
+  });
+
+  const todoInput = document.getElementById('todo-input');
+  todoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      (0,_modules_todo_js__WEBPACK_IMPORTED_MODULE_1__.addTodo)();
+      displayTodoList();
+    }
+  });
+
+  displayTodoList();
 });
 
 
@@ -394,7 +468,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  padding: 0;\r\n  margin: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\nbody {\r\n  display: flex;\r\n  height: 100vh;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.todos-container {\r\n  margin: auto;\r\n  width: 80%;\r\n  height: auto;\r\n  box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);\r\n  -webkit-box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);\r\n  -moz-box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);\r\n}\r\n\r\n.todos-list {\r\n  list-style: none;\r\n}\r\n\r\n.todo-item {\r\n  display: flex;\r\n  padding: 1em;\r\n  border-bottom: 2px solid lightgray;\r\n}\r\n\r\n.todo-item > .checkbox {\r\n  margin: 0 1em 0 0;\r\n}\r\n\r\n.todo-input {\r\n  height: 100%;\r\n  padding: 0.5em 0;\r\n  width: 100%;\r\n  border: none;\r\n  outline: none;\r\n}\r\n\r\n.todo-input:active {\r\n  border: none;\r\n  outline: none;\r\n}\r\n\r\n.clear-list {\r\n  padding: 1em;\r\n  text-align: center;\r\n  cursor: pointer;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  padding: 0;\r\n  margin: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.display-none {\r\n  display: none;\r\n}\r\n\r\n.display-flex {\r\n  display: flex;\r\n}\r\n\r\n.bg-focus {\r\n  background-color: rgb(241, 241, 181);\r\n}\r\n\r\ninput[type=text] {\r\n  border: none;\r\n  outline: none;\r\n  background-color: inherit;\r\n  width: 100%;\r\n}\r\n\r\nbody {\r\n  display: flex;\r\n  height: 100vh;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.todos-container {\r\n  margin: auto;\r\n  width: 80%;\r\n  height: auto;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n  box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);\r\n  -webkit-box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);\r\n  -moz-box-shadow: 0 0 35px 0 rgba(0, 0, 0, 0.49);\r\n}\r\n\r\n.todos-container h1 {\r\n  width: 100%;\r\n  padding: 0.5em;\r\n}\r\n\r\n.line-through {\r\n  text-decoration: line-through;\r\n  color: #808080;\r\n}\r\n\r\n.todos-list {\r\n  list-style: none;\r\n  width: 100%;\r\n}\r\n\r\n.todo-item {\r\n  display: flex;\r\n  padding: 1em;\r\n  border-bottom: 2px solid lightgray;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  width: 100%;\r\n}\r\n\r\n.todo-item-left {\r\n  display: flex;\r\n  width: 100%;\r\n  flex: 2;\r\n}\r\n\r\n.todo-item > span {\r\n  cursor: pointer;\r\n  color: lightgray;\r\n}\r\n\r\n.todo-item-left > .checkbox {\r\n  margin: 0 1em 0 0;\r\n}\r\n\r\n.todo-input {\r\n  height: 100%;\r\n  padding: 0.5em 0;\r\n  width: 100%;\r\n  border: none;\r\n  outline: none;\r\n}\r\n\r\n.todo-input:active {\r\n  border: none;\r\n  outline: none;\r\n}\r\n\r\n.clear-list {\r\n  padding: 1em;\r\n  align-self: center;\r\n  cursor: pointer;\r\n  border: none;\r\n  background-color: inherit;\r\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -498,6 +572,88 @@ module.exports = function (cssWithMappingToString) {
   };
   return list;
 };
+
+/***/ }),
+/* 11 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addTodo": () => (/* binding */ addTodo),
+/* harmony export */   "deleteAllCompleted": () => (/* binding */ deleteAllCompleted),
+/* harmony export */   "deleteTodoItem": () => (/* binding */ deleteTodoItem),
+/* harmony export */   "getFromLocalStorage": () => (/* reexport safe */ _local_storage_js__WEBPACK_IMPORTED_MODULE_0__.getFromLocalStorage),
+/* harmony export */   "saveToLocalStorage": () => (/* reexport safe */ _local_storage_js__WEBPACK_IMPORTED_MODULE_0__.saveToLocalStorage),
+/* harmony export */   "updateTodo": () => (/* binding */ updateTodo)
+/* harmony export */ });
+/* harmony import */ var _local_storage_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+
+
+// Adds new TODO item to the list
+const addTodo = () => {
+  const todos = (0,_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.getFromLocalStorage)();
+  const newTodoDescription = document.getElementById('todo-input');
+  const newTodo = {
+    description: newTodoDescription.value,
+    completed: false,
+    index: todos.length,
+  };
+  newTodoDescription.value = '';
+  todos.push(newTodo);
+  (0,_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.saveToLocalStorage)(todos);
+};
+
+// Updates single TODO item after edit
+const updateTodo = (todos, index, value) => {
+  todos[index].description = value;
+
+  (0,_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.saveToLocalStorage)(todos);
+};
+
+// Deletes single TODO from the list
+const deleteTodoItem = (todos, index) => {
+  const newTodos = todos.filter((todo, innerIndex) => index !== innerIndex);
+  for (let i = 0; i < newTodos.length; i += 1) {
+    newTodos[i].index = i;
+  }
+  (0,_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.saveToLocalStorage)(newTodos);
+};
+
+// Deletes all completed Items in the list
+const deleteAllCompleted = (todos) => {
+  const newTodos = todos.filter((todo) => todo.completed !== true);
+  for (let i = 0; i < newTodos.length; i += 1) {
+    newTodos[i].index = i;
+  }
+  (0,_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.saveToLocalStorage)(newTodos);
+};
+
+
+
+/***/ }),
+/* 12 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getFromLocalStorage": () => (/* binding */ getFromLocalStorage),
+/* harmony export */   "saveToLocalStorage": () => (/* binding */ saveToLocalStorage)
+/* harmony export */ });
+// Fetch/GET data/TODOs from the localStorage
+const getFromLocalStorage = () => {
+  let data = JSON.parse(localStorage.getItem('todos'));
+  if (!data) {
+    data = [];
+  }
+  return data;
+};
+
+// Saves data/ TODOs in the localStorage
+const saveToLocalStorage = (todos) => {
+  localStorage.setItem('todos', JSON.stringify(todos));
+};
+
+
 
 /***/ })
 ],

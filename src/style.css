@@ -76,7 +76,6 @@ body {
 .todo-item > span {
   cursor: pointer;
   color: lightgray;
-  flex: 0.1;
 }
 
 .todo-item-left > .checkbox {
