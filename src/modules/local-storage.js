@@ -12,4 +12,4 @@ const saveToLocalStorage = (todos) => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-export { getFromLocalStorage, saveToLocalStorage };
+module.exports = { getFromLocalStorage, saveToLocalStorage };
