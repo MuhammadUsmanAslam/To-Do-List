@@ -56,7 +56,7 @@ const newUpdateTodos = [{
 
 // Update Todos Ends Here
 
-const deleteAllCompletedList = [{
+const deleteAllCompletedLists = [{
   description: '1',
   completed: true,
   index: 0,
@@ -73,7 +73,7 @@ const deleteAllCompletedList = [{
 },
 ];
 
-const newDeleteAllCompletedList = [
+const newDeleteAllCompletedLists = [
   {
     description: '2',
     completed: false,
@@ -102,7 +102,7 @@ describe('CRUD Operations on ToDo List', () => {
 
   test('Delete All Completed ToDo items', () => {
     expect(
-      deleteAllCompleted(deleteAllCompletedList),
-    ).toEqual(newDeleteAllCompletedList);
+      deleteAllCompleted(deleteAllCompletedLists),
+    ).toEqual(newDeleteAllCompletedLists);
   });
 });
