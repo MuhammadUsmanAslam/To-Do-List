@@ -59,7 +59,7 @@ const displayTodoList = () => {
     editInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         todoItem.classList.toggle('bg-focus');
-        updateTodo(todos, index, e.target.value);
+        saveToLocalStorage(updateTodo(todos, index, e.target.value));
         displayTodoList();
       }
     });
@@ -71,7 +71,7 @@ const displayTodoList = () => {
     deleteIcon.className = 'display-none';
     deleteIcon.innerHTML = 'delete';
     deleteIcon.addEventListener('click', () => {
-      deleteTodoItem(todos, index);
+      saveToLocalStorage(deleteTodoItem(todos, index));
       displayTodoList();
     });
     todoItem.appendChild(deleteIcon);
@@ -93,7 +93,7 @@ const displayTodoList = () => {
 
     const clearList = document.getElementById('clear-list');
     clearList.addEventListener('click', () => {
-      deleteAllCompleted(todos);
+      saveToLocalStorage(deleteAllCompleted(todos));
       displayTodoList();
     });
   });
@@ -102,14 +102,20 @@ const displayTodoList = () => {
 window.addEventListener('load', () => {
   const addNewTodo = document.getElementById('add-new-todo');
   addNewTodo.addEventListener('click', () => {
-    addTodo();
+    const todos = getFromLocalStorage();
+    const newTodoDescription = document.getElementById('todo-input');
+    saveToLocalStorage(addTodo(todos, newTodoDescription.value));
+    newTodoDescription.value = '';
     displayTodoList();
   });
 
   const todoInput = document.getElementById('todo-input');
   todoInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-      addTodo();
+      const todos = getFromLocalStorage();
+      const newTodoDescription = document.getElementById('todo-input');
+      saveToLocalStorage(addTodo(todos, newTodoDescription.value));
+      newTodoDescription.value = '';
       displayTodoList();
     }
   });
