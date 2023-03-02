@@ -1,6 +1,6 @@
 // Fetch/GET data/TODOs from the localStorage
 const getFromLocalStorage = () => {
-  let data = JSON.parse(localStorage.getItem('todos'));
+  let data = JSON.parse(window.localStorage.getItem('todos'));
   if (!data) {
     data = [];
   }
@@ -9,7 +9,7 @@ const getFromLocalStorage = () => {
 
 // Saves data/ TODOs in the localStorage
 const saveToLocalStorage = (todos) => {
-  localStorage.setItem('todos', JSON.stringify(todos));
+  window.localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-module.exports = { getFromLocalStorage, saveToLocalStorage };
+export { getFromLocalStorage, saveToLocalStorage };
