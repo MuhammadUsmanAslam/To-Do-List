@@ -5,7 +5,6 @@ const addTodo = (todos, newTodoDescription) => {
     completed: false,
     index: todos.length,
   };
-  newTodoDescription.value = '';
   todos.push(newTodo);
   return todos;
 };
@@ -14,6 +13,17 @@ const addTodo = (todos, newTodoDescription) => {
 const updateTodo = (todos, index, value) => {
   todos[index].description = value;
   return todos;
+};
+
+// Update Single TODO Completed Status
+const updateCompleted = (todos, index, e) => {
+  if (e.target.checked) {
+    todos[index].completed = true;
+    e.target.parentNode.children[1].classList.add('line-through');
+  } else {
+    todos[index].completed = false;
+    e.target.parentNode.children[1].classList.remove('line-through');
+  }
 };
 
 // Deletes single TODO from the list
@@ -34,9 +44,6 @@ const deleteAllCompleted = (todos) => {
   return newTodos;
 };
 
-module.exports = {
-  addTodo,
-  deleteTodoItem,
-  deleteAllCompleted,
-  updateTodo,
+export {
+  addTodo, deleteTodoItem, deleteAllCompleted, updateTodo, updateCompleted,
 };

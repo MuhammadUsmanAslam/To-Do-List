@@ -4,6 +4,7 @@ import {
   deleteTodoItem,
   deleteAllCompleted,
   updateTodo,
+  updateCompleted,
 } from './modules/todo.js';
 
 import {
@@ -30,13 +31,7 @@ const displayTodoList = () => {
     }
 
     input.onchange = (e) => {
-      if (e.target.checked) {
-        todos[index].completed = true;
-        e.target.parentNode.children[1].classList.add('line-through');
-      } else {
-        todos[index].completed = false;
-        e.target.parentNode.children[1].classList.remove('line-through');
-      }
+      updateCompleted(todos, index, e);
       saveToLocalStorage(todos);
     };
 
